@@ -1,0 +1,1 @@
+require(4929117737)(script.Parent, script.Settings) --load the module, this is so it can be instantly updated at any time
