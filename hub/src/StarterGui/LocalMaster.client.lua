@@ -1,7 +1,7 @@
 local cam = workspace.CurrentCamera
 local plr = game.Players.LocalPlayer
 local UIS = game:GetService("UserInputService")
-local TS = game:GetService("TweenService")
+local TS = game:GetService("TweenService") -- stop it
 local DS = game:GetService("DataStoreService")
 local CoverTS = TweenInfo.new(1)
 local CamTS = TweenInfo.new(1,Enum.EasingStyle.Quart,Enum.EasingDirection.Out)
