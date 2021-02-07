@@ -1,6 +1,6 @@
 local uis = game:GetService("UserInputService")
 local towerMemory
-local plrresettime = game.Players.LocalPlayer:WaitForChild("ResetTime").Value
+local plrresettime = game.Players.LocalPlayer:WaitForChild("PlrSettings").ResetTime.Value
 
 local ts = game:GetService("TweenService")
 local ts1 = TweenInfo.new(plrresettime)
@@ -10,13 +10,15 @@ s.Name = "ClientSound"
 s.Parent = workspace
 s.SoundId = "rbxassetid://12222030"
 
-local function UnloadClientStuff(twr)
-	game.Workspace[twr]:Destroy()
+local function DestroyForClient(twr)
+	if game.Workspace[twr] ~= nil then
+		game.Workspace[twr]:Destroy()
+	end
 end
 
 local function RefreshClient(twr)
 	if game.Workspace:FindFirstChild(twr) then
-		UnloadClientStuff(twr)
+		DestroyForClient(twr)
 	end
 	local replicate = game.ReplicatedStorage.ClientSideParts[twr]:Clone()
 	replicate.Parent = workspace
@@ -26,10 +28,6 @@ local function RefreshClient(twr)
 			m.Handle()
 		end
 	end
-end
-
-local function UnloadClientTower(twr)
-	UnloadClientStuff(twr)
 end
 
 uis.InputBegan:Connect(function(input)
@@ -71,4 +69,4 @@ end)
 
 
 game.ReplicatedStorage.RequestTower.OnClientEvent:Connect(RefreshClient)
-game.ReplicatedStorage.UnloadTower.OnClientEvent:Connect(UnloadClientTower)
+game.ReplicatedStorage.UnloadTower.OnClientEvent:Connect(DestroyForClient)

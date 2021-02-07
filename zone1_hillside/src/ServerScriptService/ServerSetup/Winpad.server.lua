@@ -1,3 +1,6 @@
+local DataStoreService = game:GetService("DataStoreService")
+local PlayerData = DataStoreService:GetDataStore("PlayerData")
+
 local HttpService = game:GetService("HttpService")
 
 local sc = script.Parent.Parent.SoulCrushing.Value
@@ -76,7 +79,30 @@ script.Parent.Touched:Connect(function(tch)
 			}
 			tabledata = HttpService:JSONEncode(tabledata)
 			HttpService:PostAsync(webhook, tabledata)
+			local tableforsave = {}
+			local success, data = pcall(function()
+				return PlayerData:GetAsync(plr.UserId)
+			end)
+
+			if success then
+				tableforsave = data
+				if tableforsave[script.Parent.Parent.Name] == nil or tableforsave[script.Parent.Parent.Name] == false then
+					tableforsave[script.Parent.Parent.Name] = true
+					if script.Parent.Parent:FindFirstChild("Spire") then
+						plr.leaderstats.Spire.Value += 1
+					else
+						plr.leaderstats.Towers.Value += 1
+					end
+					PlayerData:SetAsync(plr.UserId, tableforsave)
+				end
+			else
+				error(data)
+			end
+			
 			game.ReplicatedStorage.UnloadTower:FireClient(plr, script.Parent.Parent.Name)
+			if script.Parent.Parent:FindFirstChild("Winroom") then
+				tch.Parent.Head.CFrame = script.Parent.Parent.Winroom.Landing.Cframe + Vector3.new(0,4,0)
+			end
 			plr.RespawnLocation = workspace.SpawnLocation
 			tch.Parent.Head.CFrame = workspace.SpawnLocation.CFrame + Vector3.new(0, 4, 0)
 	--[[	if plr.TowerFolder[script.Parent.Parent.Name].Value == false then

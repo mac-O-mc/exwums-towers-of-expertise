@@ -16,6 +16,10 @@ local function GetData(player)
 	total.Parent = ls
 	total.Name = "Towers"
 	total.Value = 0
+	local sec = Instance.new("NumberValue")
+	sec.Parent = ls
+	sec.Name = "Towers"
+	total.Value = 0
 
 	local y, net = pcall(function()
 		return MainStore:GetAsync(key) -- gather player data from main
