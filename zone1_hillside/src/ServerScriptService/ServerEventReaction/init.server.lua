@@ -5,8 +5,9 @@ DamageEvent.OnServerEvent:Connect(function(Player,Damage)
 	local char = Player.Character
 	if char ~= nil and Debounce ~= true then
 		Debounce = true
-		local Humanoid = char:WaitForChild("Humanoid")
-		Humanoid:TakeDamage(Damage)
+		if char.Humanoid ~= nil then
+			char.Humanoid:TakeDamage(Damage)
+		end
 		wait(0.10) 
 		Debounce = false
 	end
@@ -17,12 +18,14 @@ local function TeleportPlr(plr,goal)
 end
 
 game.ReplicatedStorage.RequestReset.OnServerEvent:Connect(function(plr, twr)
-	plr.Character:Destroy()
-	plr.CurrentTower.Value = ""
-	wait()
-	plr:LoadCharacter()
-	game.ReplicatedStorage.RequestResetLocal:FireClient(plr)
-	plr.CurrentTower.Value = twr
+	if twr ~= "" then
+		plr.Character:Destroy()
+		plr.CurrentTower.Value = ""
+		wait()
+		plr:LoadCharacter()
+		game.ReplicatedStorage.RequestResetLocal:FireClient(plr)
+		plr.CurrentTower.Value = twr
+	end
 end)
 
 game.ReplicatedStorage.TeleportEvent.OnServerEvent:Connect(TeleportPlr)

@@ -210,8 +210,8 @@ end)
 
 -- USER INPUT SERVICE
 
-UIS.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.Keyboard and script.parent.MainGui.Enabled == true then
+UIS.InputBegan:Connect(function(input, gpev)
+	if input.UserInputType == Enum.UserInputType.Keyboard and script.parent.MainGui.Enabled == true and not gpev then
 		local KeyPressed = input.KeyCode
 		print(KeyPressed)
 		if KeyPressed == Enum.KeyCode.D then

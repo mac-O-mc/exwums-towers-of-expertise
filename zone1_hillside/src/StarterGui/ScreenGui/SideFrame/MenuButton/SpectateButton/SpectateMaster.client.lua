@@ -10,10 +10,13 @@ local function updatePlayerList(removed)
 	for i, v in pairs(game.Players:GetPlayers()) do
 		if v ~= removed and not table.find(playerList,v) then
 			table.insert(playerList, v)
-		elseif v == removed then
-			table.remove(playerList, v)
 		end
 	end
+	if removed then
+		local rem = table.find(playerList, removed)
+		table.remove(playerList, rem)
+	end
+	
 end
 
 local function camera(player)
@@ -67,8 +70,8 @@ frame.PlayerName.RightButton.MouseButton1Click:Connect(function()
 	camera(playerList[current])
 end)
 
-uis.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.Keyboard and frame.Visible == true then
+uis.InputBegan:Connect(function(input, gpev)
+	if input.UserInputType == Enum.UserInputType.Keyboard and frame.Visible == true and not gpev then
 		local KeyPressed = input.KeyCode
 		if KeyPressed == Enum.KeyCode.Q then
 			current = current - 1

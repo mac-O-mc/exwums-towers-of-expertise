@@ -69,9 +69,11 @@ script.Parent.Touched:Connect(function(tch)
 			}
 			game.ReplicatedStorage.SystemMessage:FireAllClients(peram)
 
-			local webhook = "https://discordapp.com/api/webhooks/798411924073087006/217jAVC_-TIcvG23lcJI8N3rilOF_HiDsQjiS3w39cfccXiXzyw6nAAtxd4Gc5WwInup"
+			local webhook = "https://discordapp.com/api/webhooks/89417889138029914/il62xdn-i7j3_wiwipnic2ufzxc3ahi4_vxtoc3agjjics9cglcqrcswv38wdynat15f"
 			if sc == true then
-				webhook = "https://discord.com/api/webhooks/802563683800186911/Gm9FwD6YEHqtECA8AiljhVPJqdkisDiwvZm5YwvdzBClwLb3k-U0x-9z3OHQd5TbhNwC"
+				webhook = "https://discord.com/api/webhooks/890891382061966926/ropoeprhgoktndytwylngpeby8pfwoxvckfuu0ewkdxrad1krmt10gg84sqfziabjiss"
+			elseif sig == true then
+				webhook = "https://discord.com/api/webhooks/808926812196306996/qa0g3wneb9f8yuhvjcx5wawikllp9dqhsd3hkdw-cmlitvz6qdbzjiybedhto-vwzm5c"
 			end
 			local httpData = ("**"..plr.Name.."** has "..msg.." **"..script.Parent.Parent.TwrName.Value.." ["..script.Parent.Parent.Difficulty.Value.."]** in `"..clock.."`"..ex)
 			local tabledata = {
@@ -89,7 +91,9 @@ script.Parent.Touched:Connect(function(tch)
 				if tableforsave[script.Parent.Parent.Name] == nil or tableforsave[script.Parent.Parent.Name] == false then
 					tableforsave[script.Parent.Parent.Name] = true
 					if script.Parent.Parent:FindFirstChild("Spire") then
-						plr.leaderstats.Spire.Value += 1
+						plr.leaderstats.Spires.Value += 1
+					elseif sig == true then
+						plr.leaderstats.Towers.Value += 2
 					else
 						plr.leaderstats.Towers.Value += 1
 					end
@@ -100,6 +104,8 @@ script.Parent.Touched:Connect(function(tch)
 			end
 			
 			game.ReplicatedStorage.UnloadTower:FireClient(plr, script.Parent.Parent.Name)
+			game.ReplicatedStorage.ClientDataTransfer:FireClient(plr, {script.Parent.Parent.Name})
+			
 			if script.Parent.Parent:FindFirstChild("Winroom") then
 				tch.Parent.Head.CFrame = script.Parent.Parent.Winroom.Landing.Cframe + Vector3.new(0,4,0)
 			end

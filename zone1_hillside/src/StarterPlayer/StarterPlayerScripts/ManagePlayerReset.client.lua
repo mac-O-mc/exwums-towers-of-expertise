@@ -30,8 +30,8 @@ local function RefreshClient(twr)
 	end
 end
 
-uis.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.Keyboard then
+uis.InputBegan:Connect(function(input, gpev)
+	if input.UserInputType == Enum.UserInputType.Keyboard and not gpev then
 		local KeyPressed = input.KeyCode
 		if KeyPressed == Enum.KeyCode.R and game.Players.LocalPlayer.CurrentTower.Value ~= "" then
 			local restartgui = game.Players.LocalPlayer.PlayerGui:WaitForChild("ScreenGui").Top.RestartText

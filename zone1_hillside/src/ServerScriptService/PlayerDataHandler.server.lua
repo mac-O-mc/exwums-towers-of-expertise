@@ -1,5 +1,6 @@
 local DataStoreService = game:GetService("DataStoreService")
 local PlayerData = DataStoreService:GetDataStore("PlayerData")
+local ClientTransfer = game.ReplicatedStorage.ClientDataTransfer
 
 game.Players.PlayerAdded:Connect(function(plr)
 	plr.RespawnLocation = game.Workspace.SpawnLocation
@@ -41,7 +42,13 @@ game.Players.PlayerAdded:Connect(function(plr)
 			ls.Spires.Value = data["UniqueSpires"]
 		end
 		ls.Towers.Value = data["UniqueTwrs"]
-		
+		local alltw = {}
+		for i,v in pairs(game.Workspace["Difficulty Chart"]:GetChildren()) do
+			if data[v.Name] ~= nil then
+				table.insert(alltw,v.Name)
+			end
+		end
+		ClientTransfer:FireClient(plr, alltw)
 	else
 		error(data)
 	end
