@@ -1,84 +1,47 @@
 local ts = game:GetService("TweenService")
-local ts1 = TweenInfo.new(1)
+local ts1 = TweenInfo.new(5)
 local p = game.Players.LocalPlayer
-local timerui = p.PlayerGui.ScreenGui.ButtonTimerFrame
+local lighting = game:GetService("Lighting")
 
-local function Button(button)
-	-- DEFAULT FUNCTION
-	for i,v in pairs(button.Parent:GetChildren()) do
-		if v.Name ~= "Button" then
-			if v:FindFirstChild("Fadeout") then
-				local tween = ts:Create(v,ts1,{Transparency = 1})
-				tween:Play()
-				v.CanCollide = false
-			elseif v:FindFirstChild("Fadein") then
-				local tween = ts:Create(v,ts1,{Transparency = 0})
-				tween:Play()
-				v.CanCollide = true
-			end
-		end
-	end
-	-- TIMER FUNCTION
-	if button:FindFirstChild("Timer") then
-		local s = button.Press:Clone()
-		s.Name = "Tick"
-		s.SoundId = "rbxassetid://12221944"
-		local y = button.Press:Clone()
-		y.Name = "Revert"
-		y.SoundId = "rbxassetid://12222152"
-		
-		local timer = timerui.Template.TextLabel:Clone()
-		timer.Parent = timerui
-		timer.Text = tostring(button.Timer.Value)
-		timer.TextColor3 = button.Color
-		timer.TextStrokeColor3 = Color3.fromRGB((button.Color.r-255)/-1,(button.Color.g-255)/-1,(button.Color.b-255)/-1)
-		timer.Name = button.BrickColor.Name
-		timer.TextTransparency = 0
-		
-		for i = button.Timer.Value,1,-1 do
-			timer.Text = i
-			s:Play()
-			wait(1)
-		end
-		y:Play()
-		timer:Destroy()
-		button.Material = Enum.Material.Metal
-		button.Activated.Value = false
-		for i,v in pairs(button.Parent:GetChildren()) do
-			if v.Name ~= "Button" then
-				if v:FindFirstChild("Fadeout") then
-					local tween = ts:Create(v,ts1,{Transparency = 0})
-					tween:Play()
-					v.CanCollide = false
-				elseif v:FindFirstChild("Fadein") then
-					local tween = ts:Create(v,ts1,{Transparency = 1})
-					tween:Play()
-					v.CanCollide = true
-				end
-			end
-		end
-	end
-end
+local s = Instance.new("Sound")
+s.Name = "ClientSound"
+s.Parent = workspace
+s.SoundId = "rbxassetid://12222030"
+
+local defaults = {
+	Ambient = lighting.Ambient,
+	Brightness = lighting.Brightness,
+	ClockTime = lighting.ClockTime,
+	FogColor = lighting.FogColor,
+	FogEnd = lighting.FogEnd,
+	FogStart = lighting.FogStart,
+	OutdoorAmbient = lighting.OutdoorAmbient,
+}
 
 script.Parent:WaitForChild("Humanoid").Touched:connect(function(touch,opp)
 	if touch.Name == "Hurt" then
 		if script.Parent.Humanoid.Health > 0 then
-			game.ReplicatedStorage.DamageEvent:FireServer(touch.dmg.Value)
+			game.ReplicatedStorage.DamageEvent:FireServer(touch.dmg.Value or 5)
 		end
-	elseif touch.Name == "Button" and touch.Activated.Value == false then
-		touch.Material = Enum.Material.Neon
-		touch.Press:Play()
-		touch.Activated.Value = true
-		Button(touch)
 	elseif touch.Name == "Entry" and touch.Parent.Name == "Teleporter" then
 		game.ReplicatedStorage.TeleportEvent:FireServer(touch.Parent.Goal.CFrame)
 		if game.Workspace:FindFirstChild("ClientSound") then
-			local s = game.Workspace.ClientSound
-			if s.SoundId ~= "rbxassetid://12222030" then
+			if touch.Parent:FindFirstChild("SoundId") and touch.Parent.SoundId.Value ~= "rbxassetid://12222030" then
+				s.SoundId = "rbxassetid://"..tostring(touch.Parent.SoundId.Value)
+			elseif s.SoundId ~= "rbxassetid://12222030" then
 				s.SoundId = "rbxassetid://12222030"
 			end
 			s:Play()
 		end
+	elseif touch.Name == "LightingChanger" then
+		if touch.RevertToDefault.Value == true then
+			local tween = ts:Create(lighting,ts1,defaults)
+			tween:Play()
+		else
+			for i,v in pairs(touch.Configuration:GetChildren()) do
+				local tween = ts:Create(lighting,ts1,{[v.Name] = v.Value})
+				tween:Play()
+			end
+		end
 	end
-
 end)

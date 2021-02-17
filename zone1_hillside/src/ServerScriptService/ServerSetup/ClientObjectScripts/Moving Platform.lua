@@ -1,11 +1,12 @@
 local LocalHandler = {}
 function LocalHandler.Handle()
-	script.Parent.Platform.BodyGyro.CFrame = script.Parent.Platform.CFrame
-	script.Parent.Platform.BodyPosition.Position = script.Parent.Platform.Position
-	script.Parent.Platform.Anchored = false
+	local plat = script.Parent:FindFirstChildOfClass("Part")
+	plat.BodyGyro.CFrame = plat.CFrame
+	plat.BodyPosition.Position = plat.Position
+	plat.Anchored = false
 	while script.Parent do
 		for i,v in pairs(script.Parent.Positions:GetChildren()) do
-			script.Parent.Platform.BodyPosition.Position = v.Position
+			plat.BodyPosition.Position = v.Position
 			wait(script.Parent:FindFirstChild("Delay") and script.Parent.Delay.Value or 5)
 		end
 	end

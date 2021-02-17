@@ -20,6 +20,19 @@ local IgnoreMaterials = {
 	Enum.Material.Pavement; Enum.Material.ForceField
 }
 
+local emojitable = {
+	Easy = "<:Easy:810747059363774475>",
+	Moderate = "<:Moderate:810747075120857092>",
+	Hard = "<:Hard:810747092854374401>",
+	Difficult = "<:Difficult:810747106431991828>",
+	Challenging = "<:Challenging:810747116628213801>",
+	Intense = "<:Intense:810747131585101834>",
+	Remorseless = "<:Remorseless:810747141068161024>",
+	Insane = "<:Insane:810747159381016617>",
+	Extreme = "<:Extreme:810747173267832892>",
+	Maniacal = "<:Maniacal:810747185934893117>",
+	Cataclysmic = "<:Cataclysmic:810747197691789332>"
+}
 --[[
 local TowerDifficulties = {
 	Easy = Color3.fromRGB(76, 255, 76),
@@ -75,7 +88,7 @@ script.Parent.Touched:Connect(function(tch)
 			elseif sig == true then
 				webhook = "https://discord.com/api/webhooks/808926812196306996/qa0g3wneb9f8yuhvjcx5wawikllp9dqhsd3hkdw-cmlitvz6qdbzjiybedhto-vwzm5c"
 			end
-			local httpData = ("**"..plr.Name.."** has "..msg.." **"..script.Parent.Parent.TwrName.Value.." ["..script.Parent.Parent.Difficulty.Value.."]** in `"..clock.."`"..ex)
+			local httpData = ("**"..plr.Name.."** has "..msg.." **"..script.Parent.Parent.TwrName.Value.." [**"..emojitable[script.Parent.Parent.Difficulty.Value].."**]** in `"..clock.."`"..ex)
 			local tabledata = {
 				["content"] = httpData
 			}

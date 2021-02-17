@@ -24,8 +24,10 @@ local function RefreshClient(twr)
 	replicate.Parent = workspace
 	for i,v in pairs(replicate:GetChildren()) do
 		if v:FindFirstChild("LocalHandler") then
-			local m = require(v.LocalHandler)
-			m.Handle()
+			coroutine.wrap(function()
+				local m = require(v.LocalHandler)
+				m.Handle()
+			end)()
 		end
 	end
 end
