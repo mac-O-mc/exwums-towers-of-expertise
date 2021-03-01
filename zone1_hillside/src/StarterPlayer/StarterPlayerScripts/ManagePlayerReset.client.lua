@@ -11,7 +11,8 @@ s.Parent = workspace
 s.SoundId = "rbxassetid://12222030"
 
 local function DestroyForClient(twr)
-	if game.Workspace[twr] ~= nil then
+	-- Man.
+	if game.Workspace[twr] ~= nil or game.Workspace[twr] ~= "" then
 		game.Workspace[twr]:Destroy()
 	end
 end

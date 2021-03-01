@@ -46,7 +46,7 @@ local wrld = plr.playercurrentworld.Value
 local zone = plr.playercurrentlevel.Value
 
 local W1Table = {
-	{"Hillside", "Zone 1", 0},
+	{"Valley Hillside", "Zone 1", 0},
 	--	{"Forest Marsh", "Zone 2"}
 	--	{"Lake", "Zone 3"},
 	--	{"Desert", "Zone 4"},

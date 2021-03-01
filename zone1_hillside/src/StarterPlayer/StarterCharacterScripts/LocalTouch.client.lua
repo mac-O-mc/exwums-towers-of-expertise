@@ -21,7 +21,7 @@ local defaults = {
 script.Parent:WaitForChild("Humanoid").Touched:connect(function(touch,opp)
 	if touch.Name == "Hurt" then
 		if script.Parent.Humanoid.Health > 0 then
-			game.ReplicatedStorage.DamageEvent:FireServer(touch.dmg.Value or 5)
+			game.ReplicatedStorage.DamageEvent:FireServer(touch:FindFirstChild("dmg") and touch.dmg.Value or 5)
 		end
 	elseif touch.Name == "Entry" and touch.Parent.Name == "Teleporter" then
 		game.ReplicatedStorage.TeleportEvent:FireServer(touch.Parent.Goal.CFrame)

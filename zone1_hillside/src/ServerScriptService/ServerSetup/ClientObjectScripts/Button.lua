@@ -2,9 +2,26 @@ local ts = game:GetService("TweenService")
 local ts1 = TweenInfo.new(1)
 local p = game.Players.LocalPlayer
 local b = script.parent.Button
+local buttonplrs
+local buttonboxes
 
-local supplr = b:FindFirstChild("SupportPlayers") and b.SupportPlayers.Value or true
-local suppsh = b:FindFirstChild("SupportPushboxes") and b.SupportPlayers.Value or false
+local function Deactivate()
+	b.Material = Enum.Material.Metal
+	b.Activated.Value = false
+	for i,v in pairs(b.Parent:GetChildren()) do
+		if v.Name ~= "Button" then
+			if v:FindFirstChild("Fadeout") then
+				local tween = ts:Create(v,ts1,{Transparency = 0})
+				tween:Play()
+				v.CanCollide = true
+			elseif v:FindFirstChild("Fadein") then
+				local tween = ts:Create(v,ts1,{Transparency = 0.5})
+				tween:Play()
+				v.CanCollide = false
+			end
+		end
+	end
+end
 
 local function Button(button)
 	-- DEFAULT FUNCTION
@@ -52,37 +69,40 @@ local function Button(button)
 		y.Volume = 1
 		y:Play()
 		timer:Destroy()
-		button.Material = Enum.Material.Metal
-		button.Activated.Value = false
-		for i,v in pairs(button.Parent:GetChildren()) do
-			if v.Name ~= "Button" then
-				if v:FindFirstChild("Fadeout") then
-					local tween = ts:Create(v,ts1,{Transparency = 0})
-					tween:Play()
-					v.CanCollide = true
-				elseif v:FindFirstChild("Fadein") then
-					local tween = ts:Create(v,ts1,{Transparency = 0.5})
-					tween:Play()
-					v.CanCollide = false
-				end
-			end
-		end
+		Deactivate()
 	end
 end
 local LocalHandler = {}
 function LocalHandler.Handle()
 	b.Touched:Connect(function(touc)
-		if b.Activated.Value == false and touc.parent.Name == p.Name and supplr == true then
+		if b:FindFirstChild("SupportPlayers") then
+			buttonplrs = b.SupportPlayers.Value
+		else
+			buttonplrs = true
+		end
+		if b:FindFirstChild("SupportPushboxes") then
+			buttonboxes = b.SupportPushboxes.Value
+		else
+			buttonboxes = false
+		end
+		if b.Activated.Value == false and touc.parent.Name == p.Name and buttonplrs == true then
 			b.Material = Enum.Material.Neon
 			b.Press:Play()
 			b.Activated.Value = true
 			Button(b)
-		elseif b.Activated.Value == false and touc.Name == "Pushbox" and suppsh == true then
+		elseif b.Activated.Value == false and touc.Name == "Pushbox" and buttonboxes == true and touc.BrickColor.Name == b.BrickColor.Name then
 			b.Material = Enum.Material.Neon
 			b.Press:Play()
 			b.Activated.Value = true
 			Button(b)
 		end
 	end)
+	if script.Parent:FindFirstChild("Deactivator") then
+		script.Parent.Deactivator.Touched:Connect(function(touc)
+			if b.Activated.Value == true and touc.parent.Name == p.Name then
+				Deactivate()
+			end
+		end)
+	end
 end
 return LocalHandler
